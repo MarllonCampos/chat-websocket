@@ -1,6 +1,8 @@
 import { ChangeEvent, useRef, useState } from "react";
 import { FiPlay, FiSend } from "react-icons/fi";
 import Message from "../Message";
+const message =
+  "Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis enim eveniet, nemo amet at sed, repellat perspiciatis dolorem quis quasi minus animi asperiores cumque ut aliquid laboriosam similique labore esse.";
 
 const Layout = () => {
   const [inputHeight, setInputHeight] = useState("auto");
@@ -18,6 +20,25 @@ const Layout = () => {
           message="Message"
           name="Marllon"
           time="22:04"
+          owner={false}
+        />
+        <Message
+          message="Message"
+          name="Marllon"
+          time="22:04"
+          owner={false}
+        />
+        <Message
+          message="Message"
+          name="Marllon"
+          time="22:04"
+          owner={false}
+        />
+        <Message
+          message={message}
+          name="Marllon"
+          time="22:04"
+          owner={true}
         />
       </div>
       <footer className="layout__bottom">
@@ -32,7 +53,7 @@ const Layout = () => {
             onChange={handleInputChange}
           />
           <button className="layout__bottom-submit">
-            <FiSend size={24} />
+            <FiSend size={20} />
           </button>
         </form>
       </footer>
