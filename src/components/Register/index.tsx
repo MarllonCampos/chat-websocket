@@ -58,6 +58,7 @@ export const Register = () => {
     if (value.length < 1) return true;
     if (!value) return true;
   };
+
   return (
     <div className="register">
       <div className="register__card">
