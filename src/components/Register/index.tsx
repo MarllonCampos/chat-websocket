@@ -1,5 +1,10 @@
 import { FormEvent, useRef } from "react";
 import { useNavigate, useRoutes } from "react-router-dom";
+import {
+  getActualGroup,
+  getUserName,
+} from "../../helpers/user";
+import { validateEmpty } from "../../helpers/validateString";
 
 const HOURSTOMINUTES = 60;
 const MINUTESTOSECONDS = 60;
@@ -26,20 +31,7 @@ export const Register = () => {
     saveKeysOnLocalStorage(name, groupId);
     navigate(`/${groupId}`);
   };
-  const getKeysFromLocalStorage = (): {
-    name: string;
-    groupId: string;
-  } => {
-    const name =
-      window.localStorage.getItem("chat-websocket-name") ||
-      "";
-    const groupId =
-      window.localStorage.getItem(
-        "chat-websocket-groupId"
-      ) || "";
 
-    return { name, groupId };
-  };
   const saveKeysOnLocalStorage = (
     name: string,
     groupId: string
@@ -52,11 +44,6 @@ export const Register = () => {
       "chat-websocket-groupId",
       groupId
     );
-  };
-
-  const validateEmpty = (value: string) => {
-    if (value.length < 1) return true;
-    if (!value) return true;
   };
 
   return (
