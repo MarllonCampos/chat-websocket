@@ -1,0 +1,40 @@
+.message {
+  display: block;
+  padding-top: 12px;
+
+  &__container {
+    padding: 4px 24px;
+    padding-left: 16px;
+    display: inline-flex;
+    flex-direction: column;
+    gap: 4px;
+    background-color: $color-blue-100;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    max-width: min(70vw, 340px);
+  }
+  &__header {
+    transition: all 0.2s linear;
+    &:hover {
+      filter: brightness(0.8);
+    }
+  }
+
+  &__footer {
+    text-align: right;
+    margin-right: -12px;
+    color: $color-white;
+  }
+
+  &__text {
+    font-size: 0.875rem;
+  }
+  &--owner {
+    float: right;
+    .message__container {
+      border-radius: 0;
+      border-top-left-radius: 8px;
+      border-bottom-left-radius: 8px;
+    }
+  }
+}
