@@ -2,10 +2,12 @@ import {
   ChangeEvent,
   FormEvent,
   KeyboardEventHandler,
+  useEffect,
   useRef,
   useState,
 } from "react";
 import { FiSend } from "react-icons/fi";
+import { io } from "socket.io-client";
 import {
   getActualGroup,
   getUserName,
@@ -16,8 +18,16 @@ const message =
   "Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis enim eveniet, nemo amet at sed, repellat perspiciatis dolorem quis quasi minus animi asperiores cumque ut aliquid laboriosam similique labore esse.";
 
 const Layout = () => {
-  const [inputHeight, setInputHeight] = useState("auto");
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const [socketIo, setSocketIo] = useState("");
+
+  useEffect(() => {
+    const socket = io("http://localhost:3003");
+
+    socket.on("message", (data) => {
+      console.log(data);
+    });
+  }, []);
 
   const handleInputChange = (event: ChangeEvent) => {
     if (!inputRef.current) return;
@@ -48,30 +58,7 @@ const Layout = () => {
   return (
     <div className="layout">
       <div className="layout__chat">
-        <Message
-          message="Message"
-          name="Marllon"
-          time="22:04"
-          owner={false}
-        />
-        <Message
-          message="Message"
-          name="Marllon"
-          time="22:04"
-          owner={false}
-        />
-        <Message
-          message="Message"
-          name="Marllon"
-          time="22:04"
-          owner={false}
-        />
-        <Message
-          message={message}
-          name="Marllon"
-          time="22:04"
-          owner={true}
-        />
+       
       </div>
       <footer className="layout__bottom">
         <form className="layout__bottom-form">

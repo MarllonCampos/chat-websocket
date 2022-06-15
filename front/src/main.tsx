@@ -12,12 +12,10 @@ import { Layout } from "./components/Layout";
 ReactDOM.createRoot(
   document.getElementById("root")!
 ).render(
-  <React.StrictMode>
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Register />} />
-        <Route path="/:groupId" element={<Layout />} />
-      </Routes>
-    </BrowserRouter>
-  </React.StrictMode>
+  <BrowserRouter>
+    <Routes>
+      <Route path="/" element={<Register />} />
+      <Route path="/:groupId" element={<Layout />} />
+    </Routes>
+  </BrowserRouter>
 );

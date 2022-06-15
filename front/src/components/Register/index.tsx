@@ -1,15 +1,6 @@
 import { FormEvent, useRef } from "react";
-import { useNavigate, useRoutes } from "react-router-dom";
-import {
-  getActualGroup,
-  getUserName,
-} from "../../helpers/user";
+import { useNavigate } from "react-router-dom";
 import { validateEmpty } from "../../helpers/validateString";
-
-const HOURSTOMINUTES = 60;
-const MINUTESTOSECONDS = 60;
-const SECONDSTOMILISECONDS = 1000;
-const DAYSTOHOURS = 24;
 
 export const Register = () => {
   const inputName = useRef<HTMLInputElement>(null);
@@ -28,17 +19,48 @@ export const Register = () => {
     if (groupIdValidate)
       return console.log("Id do grupo preenchido errado");
 
-    saveKeysOnLocalStorage(name, groupId);
-    navigate(`/${groupId}`);
-  };
+    const body = {
+      name,
+      groupId,
+    };
+    fetch("http://localhost:3003", {
+      body: JSON.stringify(body),
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then(({ name, groupName, groupId }) => {
+        saveKeysOnLocalStorage({
+          name,
+          groupId,
+          groupName,
+        });
 
-  const saveKeysOnLocalStorage = (
-    name: string,
-    groupId: string
-  ) => {
+        // navigate(`/${groupName}`);
+      })
+      .catch(() => {
+        console.error("Ocorreu um erro");
+      });
+  };
+  interface ISaveKeysOnLocalStorage {
+    name: string;
+    groupName: string;
+    groupId: string;
+  }
+  const saveKeysOnLocalStorage = ({
+    name,
+    groupName,
+    groupId,
+  }: ISaveKeysOnLocalStorage) => {
     window.localStorage.setItem(
       "chat-websocket-name",
       name
+    );
+    window.localStorage.setItem(
+      "chat-websocket-groupName",
+      groupName
     );
     window.localStorage.setItem(
       "chat-websocket-groupId",
