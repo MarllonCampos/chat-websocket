@@ -73,7 +73,7 @@ const Layout = () => {
     <div className="layout">
       <div className="layout__chat">
         {messages.map(({ message, time, name }) => (
-          <Message name={name} message={message} time={time} key={time} />
+          <Message name={name} message={message} time={time} key={time.toString()} />
         ))}
       </div>
       <footer className="layout__bottom">
