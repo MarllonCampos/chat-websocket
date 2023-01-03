@@ -10,26 +10,6 @@ class CreateMessageService {
   }
 }
 
-
-class CreateAuthorService {
-  async create(name: string) {
-    return await prismaClient.author.create({
-      data: {
-        name
-      }
-    })
-  }
-}
-
-class CreateChatService {
-  async create(name: string) {
-    return await prismaClient.chat.create({
-      data: {
-        name
-      }
-    })
-  }
-}
 interface IMessageOnChat {
   author_id: string, chat_id: string, message_id: string
   text: string;
@@ -48,4 +28,4 @@ class CreateMessageOnChatService {
 }
 
 
-export { CreateAuthorService, CreateChatService, CreateMessageService, CreateMessageOnChatService }
+export { CreateMessageService, CreateMessageOnChatService }

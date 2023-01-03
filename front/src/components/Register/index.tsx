@@ -1,99 +1,61 @@
 import { FormEvent, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { saveKeysOnLocalStorage } from "../../helpers/user";
 import { validateEmpty } from "../../helpers/validateString";
 
 export const Register = () => {
   const inputName = useRef<HTMLInputElement>(null);
-  const inputGroupId = useRef<HTMLInputElement>(null);
+  const inputGroupName = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
 
-  const formSubmit = (event: FormEvent) => {
+  const formSubmit = async (event: FormEvent) => {
     event.preventDefault();
-    if (!inputName.current || !inputGroupId.current) return;
+    if (!inputName.current || !inputGroupName.current) return;
     const { value: name } = inputName.current;
-    const { value: groupId } = inputGroupId.current;
-    const nameValidate = validateEmpty(name);
-    const groupIdValidate = validateEmpty(groupId);
-    if (nameValidate)
-      return console.log("Nome curto demais");
-    if (groupIdValidate)
-      return console.log("Id do grupo preenchido errado");
+    const { value: groupName } = inputGroupName.current;
+    if (validateEmpty(name)) return console.log("Nome curto demais");
+    if (validateEmpty(groupName)) return console.log("Id do grupo preenchido errado");
 
     const body = {
       name,
-      groupId,
+      groupName,
     };
-    fetch("http://localhost:3003", {
-      body: JSON.stringify(body),
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => res.json())
-      .then(({ name, groupName, groupId }) => {
-        saveKeysOnLocalStorage({
-          name,
-          groupId,
-          groupName,
-        });
-
-        // navigate(`/${groupName}`);
-      })
-      .catch(() => {
-        console.error("Ocorreu um erro");
+    try {
+      const response = await fetch("http://localhost:3003", {
+        body: JSON.stringify(body),
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
       });
-  };
-  interface ISaveKeysOnLocalStorage {
-    name: string;
-    groupName: string;
-    groupId: string;
-  }
-  const saveKeysOnLocalStorage = ({
-    name,
-    groupName,
-    groupId,
-  }: ISaveKeysOnLocalStorage) => {
-    window.localStorage.setItem(
-      "chat-websocket-name",
-      name
-    );
-    window.localStorage.setItem(
-      "chat-websocket-groupName",
-      groupName
-    );
-    window.localStorage.setItem(
-      "chat-websocket-groupId",
-      groupId
-    );
+      const bodyResponse = await response.json();
+      const { groupId, userId } = await bodyResponse;
+
+      saveKeysOnLocalStorage({
+        name,
+        groupId,
+        groupName,
+        userId,
+      });
+
+      navigate(`/${groupName}`);
+    } catch (error) {
+      console.error("Ocorreu um erro", error);
+    }
   };
 
   return (
     <div className="register">
       <div className="register__card">
-        <h3 className="register__card-title">
-          Entre no Chat
-        </h3>
-        <form
-          className="register__card-form"
-          onSubmit={formSubmit}
-        >
+        <h3 className="register__card-title">Entre no Chat</h3>
+        <form className="register__card-form" onSubmit={formSubmit}>
           <div className="form-group">
             <label htmlFor="name">Nome: </label>
-            <input
-              type="text"
-              name="name"
-              autoFocus
-              ref={inputName}
-            />
+            <input type="text" name="name" autoFocus ref={inputName} />
           </div>
           <div className="form-group">
-            <label htmlFor="group-id">Id do grupo: </label>
-            <input
-              type="text"
-              name="group-id"
-              ref={inputGroupId}
-            />
+            <label htmlFor="group-name">Id do grupo: </label>
+            <input type="text" name="group-name" ref={inputGroupName} />
           </div>
 
           <button type="submit">Entrar</button>

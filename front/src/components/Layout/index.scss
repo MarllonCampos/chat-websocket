@@ -6,7 +6,12 @@
 
   &__chat {
     height: 100%;
+    max-height: calc(100vh - 48px);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
     flex: 1;
+    overflow-y: scroll;
   }
 
   &__bottom {
@@ -44,10 +49,9 @@
         padding: 0 2px;
       }
       &::-webkit-scrollbar-thumb {
-        background-color: $color-blue-100;
+        background-color: $color-white;
         -webkit-border-radius: 16000px;
         cursor: pointer;
-        z-index: 100;
       }
 
       &::-webkit-input-placeholder {

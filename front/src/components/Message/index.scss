@@ -32,6 +32,7 @@
   }
   &--owner {
     float: right;
+    align-self: flex-end;
     .message__container {
       border-radius: 0;
       border-top-left-radius: 8px;
