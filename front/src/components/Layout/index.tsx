@@ -10,7 +10,6 @@ interface MessageState extends Exclude<IMessage, "owner"> {}
 
 const Layout = () => {
   const inputRef = useRef<HTMLTextAreaElement>(null);
-  const [socketIo, setSocketIo] = useState("");
   const [messages, setMessages] = useState<MessageState[]>([]);
   useEffect(() => {
     socket.on("chat-message", (message: any) => {
@@ -67,7 +66,6 @@ const Layout = () => {
 
     socket.emit("chat-message", socketObject);
   };
-  console.log(messages);
 
   return (
     <div className="layout">

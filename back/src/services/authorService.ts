@@ -1,5 +1,5 @@
 import { UserErrors } from "../errors/user-errors"
-import prismaClient from "../prisma"
+import prismaClient from "../../prisma"
 
 export class AuthorService {
   async create(name: string) {

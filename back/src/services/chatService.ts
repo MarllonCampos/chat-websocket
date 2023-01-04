@@ -1,4 +1,4 @@
-import prismaClient from "../prisma"
+import prismaClient from "../../prisma"
 
 
 export class ChatService {
@@ -11,12 +11,18 @@ export class ChatService {
   }
 
   async find(groupName: string) {
-    const chat = await prismaClient.chat.findFirst({
-      where: {
-        name: groupName
-      },
-    })
-    return chat ?? null
+    console.log("find")
+    try {
+      const chat = await prismaClient.chat.findFirst({
+        where: {
+          name: groupName
+        },
+      })
+      return chat ?? null
+
+    } catch (error) {
+      console.log(error)
+    }
   }
 
 
