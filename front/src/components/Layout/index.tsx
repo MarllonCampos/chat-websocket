@@ -6,10 +6,11 @@ import { validateEmpty } from "../../helpers/validateString";
 import Message, { IMessage } from "../Message";
 const socket = io("http://localhost:3003");
 
-interface MessageState extends Exclude<IMessage, "owner"> {}
+interface MessageState extends IMessage {}
 
 const Layout = () => {
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const layoutChat = useRef<HTMLDivElement>(null);
   const [messages, setMessages] = useState<MessageState[]>([]);
   useEffect(() => {
     socket.on("chat-message", (message: any) => {
@@ -20,11 +21,11 @@ const Layout = () => {
 
     socket.emit("connect-group", { groupId, userId });
     socket.on("oldMessages", (oldMessages) => {
-      console.log("oldMessages", oldMessages);
       const formattedOldMessages = oldMessages.map((oldMessage: any) => ({
         ...oldMessage,
         time: new Date(oldMessage.time),
       }));
+
       setMessages((prevState) => [...prevState, ...formattedOldMessages]);
     });
     return () => {
@@ -32,6 +33,16 @@ const Layout = () => {
       socket.disconnect();
     };
   }, []);
+
+  useEffect(() => {
+    if (layoutChat.current) {
+      console.log("Scrolled");
+      console.log(layoutChat.current.scrollHeight);
+      layoutChat.current?.scrollTo(0, layoutChat.current.scrollHeight);
+    } else {
+      console.log("Not Scrolled");
+    }
+  }, [messages]);
 
   const handleInputChange = (event: ChangeEvent) => {
     if (!inputRef.current) return;
@@ -69,9 +80,9 @@ const Layout = () => {
 
   return (
     <div className="layout">
-      <div className="layout__chat">
+      <div className="layout__chat" ref={layoutChat}>
         {messages.map(({ message, time, name }) => (
-          <Message name={name} message={message} time={time} key={time.toString()} />
+          <Message name={name} message={message} time={time} key={`${message}-${time.toString()}`} />
         ))}
       </div>
       <footer className="layout__bottom">

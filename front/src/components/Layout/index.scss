@@ -7,6 +7,7 @@
   &__chat {
     height: 100%;
     max-height: calc(100vh - 48px);
+    padding-bottom: 24px;
     display: flex;
     flex-direction: column;
     gap: 8px;
