@@ -6,6 +6,8 @@ io.on("connection", (client) => {
 
   client.on("connect-group", async ({ groupId, userId }) => {
     const chatService = new ChatService()
+
+    client.join(groupId)
     console.log("connectGroup")
     try {
       const oldMessages = await chatService.getOldMessages(groupId)
@@ -30,13 +32,11 @@ io.on("connection", (client) => {
   })
 
 
-  client.on("chat-message", async (message) => {
-    console.log(message)
+  client.on("chat-message", async ({ groupId, ...message }) => {
     const messageService = new MessageService()
     try {
-      const logs = await messageService.create(message)
-      console.log(logs)
-      client.broadcast.emit("chat-message", message)
+      await messageService.create({ ...message, groupId })
+      client.broadcast.to(groupId).emit("chat-message", message)
     } catch (error) {
       console.log("ERROR - Failed to send message for everyone ", error)
     }
