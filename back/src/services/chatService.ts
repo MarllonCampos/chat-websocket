@@ -50,7 +50,6 @@ export class ChatService {
 
 
     })
-    console.log(oldMessages[0].messages);
 
     if (!oldMessages) return []
     return oldMessages[0].messages

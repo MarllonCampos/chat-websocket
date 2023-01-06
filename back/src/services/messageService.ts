@@ -13,9 +13,6 @@ export class MessageService {
 
 
     const author = await authorService.find(name)
-    console.log(author, await prismaClient.author.findMany({
-      where: { name: { not: "null" } }
-    }))
     if (!author) return UserErrors.UserNotFound()
     return await prismaClient.message.create({
       data: {
