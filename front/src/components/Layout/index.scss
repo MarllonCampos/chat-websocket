@@ -6,7 +6,7 @@
 
   &__chat {
     height: 100%;
-    background-image: url("../../images/LayoutBackground.svg");
+    background-size: 100%;
     max-height: calc(100vh - 48px);
     padding-bottom: 24px;
     display: flex;
@@ -14,6 +14,18 @@
     gap: 8px;
     flex: 1;
     overflow-y: scroll;
+    position: relative;
+  }
+  &::before {
+    content: "";
+    background: rgba(0, 0, 0, 0.76) url("../../images/LayoutBackground.svg") no-repeat;
+    background-size: cover;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    bottom: 48px;
+    left: 0px;
+    opacity: 0.75;
   }
 
   &__bottom {
