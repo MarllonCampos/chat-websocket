@@ -10,7 +10,7 @@ export interface IMessage {
 const randomColor = Math.floor(Math.random() * 16777215).toString(16); // Generate a hex RandomColor
 
 const Message = ({ message, name, time }: IMessage) => {
-  const owner = name == getUserName();
+  const owner = name === getUserName();
   const date = new Date(time).toLocaleTimeString(navigator.language, { hour: "2-digit", minute: "2-digit" });
 
   const formatName = `~${name}`;

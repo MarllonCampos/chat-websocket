@@ -6,6 +6,7 @@
 
   &__chat {
     height: 100%;
+    background-image: url("../../images/LayoutBackground.svg");
     max-height: calc(100vh - 48px);
     padding-bottom: 24px;
     display: flex;

@@ -4,26 +4,27 @@ import { io } from "socket.io-client";
 import { getActualGroup, getUserId, getUserName } from "../../helpers/user";
 import { validateEmpty } from "../../helpers/validateString";
 import Message, { IMessage } from "../Message";
+import MessagePool, { MessageType } from "../MessagePool";
 const socket = io("http://localhost:3003");
 
-interface MessageState extends IMessage {}
+interface MessageState extends IMessage {
+  type: MessageType;
+}
 
 const Layout = () => {
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const layoutChat = useRef<HTMLDivElement>(null);
   const [messages, setMessages] = useState<MessageState[]>([]);
+  const [authorConnected, setAuthorConnected] = useState<string>("");
   useEffect(() => {
     socket.on("chat-message", (message: any) => {
-      setMessages((prevState) => [...prevState, message]);
+      setMessages((prevState) => [...prevState, { ...message, type: MessageType.message }]);
     });
-    const groupId = getActualGroup();
-    const userId = getUserId();
-
-    socket.emit("connect-group", { groupId, userId });
     socket.on("oldMessages", (oldMessages) => {
       const formattedOldMessages = oldMessages.map((oldMessage: any) => ({
         ...oldMessage,
         time: new Date(oldMessage.time),
+        type: MessageType.message,
       }));
 
       setMessages((prevState) => [...prevState, ...formattedOldMessages]);
@@ -32,7 +33,24 @@ const Layout = () => {
       socket.off("disconnect");
       socket.disconnect();
     };
-  }, []);
+  }, [socket]);
+
+  useEffect(() => {
+    const groupId = getActualGroup();
+    const userId = getUserId();
+    socket.emit("connect-group", { groupId, userId });
+    socket.on("author-connected", (author: string) => {
+      console.log({ message: "", name: author, time: new Date(), type: MessageType.alert });
+      setMessages((prevState) => [
+        ...prevState,
+        { message: "", name: author, time: new Date(), type: MessageType.alert },
+      ]);
+    });
+    return () => {
+      socket.off("disconnect");
+      socket.disconnect();
+    };
+  }, [socket]);
 
   useEffect(() => {
     if (layoutChat.current) {
@@ -66,6 +84,7 @@ const Layout = () => {
       message,
       time: new Date(),
       name: getUserName(),
+      type: MessageType.message,
     };
 
     const socketObject = {
@@ -81,8 +100,8 @@ const Layout = () => {
   return (
     <div className="layout">
       <div className="layout__chat" ref={layoutChat}>
-        {messages.map(({ message, time, name }) => (
-          <Message name={name} message={message} time={time} key={`${message}-${time.toString()}`} />
+        {messages.map(({ message, time, name, type }) => (
+          <MessagePool name={name} message={message} time={time} key={`${message}-${time.toString()}`} type={type} />
         ))}
       </div>
       <footer className="layout__bottom">
