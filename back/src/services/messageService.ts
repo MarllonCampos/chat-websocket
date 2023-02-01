@@ -12,7 +12,7 @@ export class MessageService {
     const authorService = new AuthorService()
 
 
-    const author = await authorService.find(name)
+    const author = await authorService.findByName(name)
     if (!author) return UserErrors.UserNotFound()
     return await prismaClient.message.create({
       data: {

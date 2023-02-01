@@ -20,12 +20,20 @@ export class AuthorService {
   }
 
 
-  async find(name: string) {
+  async findByName(name: string) {
     const user = await prismaClient.author.findFirst({
       where: { name }
     })
     return user ?? null
   }
 
+
+  async findById(authorId: string) {
+    return await prismaClient.author.findFirst({
+      where: {
+        id: authorId
+      }
+    })
+  }
 }
 

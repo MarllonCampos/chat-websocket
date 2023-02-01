@@ -11,7 +11,7 @@ router.post("/", async (req, res) => {
   try {
 
     const groupAlreadyExists = await chatService.find(groupName)
-    const authorAlreadyExists = await authorService.find(name)
+    const authorAlreadyExists = await authorService.findByName(name)
 
     const chatInfo = groupAlreadyExists ?? await chatService.create(groupName)
     const authorInfo = authorAlreadyExists ?? await authorService.create(name)
