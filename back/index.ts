@@ -1,5 +1,6 @@
 import { serverHttp } from "./src/http";
 import "./src/websocket"
-serverHttp.listen(3003, () => {
+const PORT = process.env.PORT
+serverHttp.listen(PORT, () => {
   console.log("Server listen on port 3003")
 })
