@@ -8,12 +8,15 @@
     display: inline-flex;
     flex-direction: column;
     gap: 4px;
+    color: $color-white;
     background-color: $color-blue-100;
     border-top-right-radius: 8px;
     border-bottom-right-radius: 8px;
     max-width: min(70vw, 340px);
   }
   &__header {
+    font-weight: bold;
+
     transition: all 0.2s linear;
     &:hover {
       filter: brightness(0.8);
@@ -34,6 +37,8 @@
     float: right;
     align-self: flex-end;
     .message__container {
+      color: $color-black;
+      background-color: $color-green-100;
       border-radius: 0;
       border-top-left-radius: 8px;
       border-bottom-left-radius: 8px;
