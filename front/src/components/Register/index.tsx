@@ -2,7 +2,7 @@ import { FormEvent, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { saveKeysOnLocalStorage } from "../../helpers/user";
 import { validateEmpty } from "../../helpers/validateString";
-
+import API_URL from "../../helpers/apiurl";
 export const Register = () => {
   const inputName = useRef<HTMLInputElement>(null);
   const inputGroupName = useRef<HTMLInputElement>(null);
@@ -21,7 +21,7 @@ export const Register = () => {
       groupName,
     };
     try {
-      const response = await fetch("http://localhost:3003", {
+      const response = await fetch(API_URL, {
         body: JSON.stringify(body),
         method: "POST",
         headers: {
@@ -30,7 +30,6 @@ export const Register = () => {
       });
       const bodyResponse = await response.json();
       const { groupId, userId } = await bodyResponse;
-
       saveKeysOnLocalStorage({
         name,
         groupId,

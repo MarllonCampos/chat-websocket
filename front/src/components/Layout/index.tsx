@@ -1,12 +1,12 @@
-import { ChangeEvent, FormEvent, KeyboardEventHandler, useEffect, useRef, useState } from "react";
+import { ChangeEvent, FormEvent, KeyboardEventHandler, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { FiSend } from "react-icons/fi";
+import { useNavigate } from "react-router-dom";
 import { io } from "socket.io-client";
 import { getActualGroup, getUserId, getUserName } from "../../helpers/user";
 import { validateEmpty } from "../../helpers/validateString";
 import Message, { IMessage } from "../Message";
 import MessagePool, { MessageType } from "../MessagePool";
-const socket = io("http://localhost:3003");
-
+import API_URL from "../../helpers/apiurl";
 interface MessageState extends IMessage {
   type: MessageType;
 }
@@ -15,12 +15,27 @@ const Layout = () => {
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const layoutChat = useRef<HTMLDivElement>(null);
   const [messages, setMessages] = useState<MessageState[]>([]);
+  const socketState = useMemo(() => io(API_URL), []);
   const [authorConnected, setAuthorConnected] = useState<string>("");
+  const navigate = useNavigate();
+
+  function isUserValid() {
+    const actualGroup = getActualGroup();
+    const userId = getUserId();
+    const userName = getUserName();
+
+    return actualGroup || userId || userName;
+  }
+
   useEffect(() => {
-    socket.on("chat-message", (message: any) => {
+    if (!isUserValid()) {
+      window.alert("User is not setted, going back to register page");
+      navigate("/");
+    }
+    socketState.on("chat-message", (message: any) => {
       setMessages((prevState) => [...prevState, { ...message, type: MessageType.message }]);
     });
-    socket.on("oldMessages", (oldMessages) => {
+    socketState.on("oldMessages", (oldMessages) => {
       const formattedOldMessages = oldMessages.map((oldMessage: any) => ({
         ...oldMessage,
         time: new Date(oldMessage.time),
@@ -29,32 +44,30 @@ const Layout = () => {
 
       setMessages((prevState) => [...prevState, ...formattedOldMessages]);
     });
+
     return () => {
-      socket.off("disconnect");
-      socket.disconnect();
+      socketState.off("connect");
+      socketState.off("disconnect");
+      socketState.off("pong");
+      socketState.disconnect();
     };
-  }, [socket]);
+  }, []);
 
   useEffect(() => {
     const groupId = getActualGroup();
     const userId = getUserId();
-    socket.emit("connect-group", { groupId, userId });
-    socket.on("author-connected", (author: string) => {
+    socketState.emit("connect-group", { groupId, userId });
+    socketState.on("author-connected", (author: string) => {
       console.log({ message: "", name: author, time: new Date(), type: MessageType.alert });
       setMessages((prevState) => [
         ...prevState,
         { message: "", name: author, time: new Date(), type: MessageType.alert },
       ]);
     });
-    return () => {
-      socket.off("disconnect");
-      socket.disconnect();
-    };
-  }, [socket]);
+  }, [socketState]);
 
   useEffect(() => {
     if (layoutChat.current) {
-      console.log("Scrolled");
       console.log(layoutChat.current.scrollHeight);
       layoutChat.current?.scrollTo(0, layoutChat.current.scrollHeight);
     } else {
@@ -94,7 +107,7 @@ const Layout = () => {
     setMessages((prevState) => [...prevState, messageObject]);
     inputRef.current.value = "";
 
-    socket.emit("chat-message", socketObject);
+    socketState.emit("chat-message", socketObject);
   };
 
   return (

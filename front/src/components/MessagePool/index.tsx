@@ -13,7 +13,6 @@ export enum MessageType {
   alert = "alert",
 }
 const MessagePool: React.FC<MessagePoolProps> = ({ message, time, name, type, ...props }) => {
-  console.log({ type, name, message, isMessage: type === MessageType.message });
   return (
     <div {...props}>
       {type === MessageType.message ? (
