@@ -20,7 +20,6 @@ io.on("connection", (client) => {
       console.log(error);
     }
     try {
-
       const oldMessages = await chatService.getOldMessages(groupId)
 
       const oldMessagesWithOwner = oldMessages.map(messages => (
