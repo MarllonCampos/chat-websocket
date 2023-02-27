@@ -3,7 +3,9 @@ import { AuthorService } from './../services/authorService';
 import { Router } from 'express'
 
 const router = Router();
-
+router.get("/", (req, res) => {
+  res.send("Server Working")
+})
 router.post("/", async (req, res) => {
   const { name, groupName } = req.body
   const authorService = new AuthorService();
