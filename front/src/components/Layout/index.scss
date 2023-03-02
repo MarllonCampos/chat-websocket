@@ -3,6 +3,18 @@
   display: grid;
   grid-template-rows: 1fr 48px;
 
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track-piece {
+    background-color: $color-blue-400;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: $color-green-100;
+    border-radius: 999px;
+  }
+
   &__chat {
     max-height: calc(100vh - 48px);
     padding-bottom: 24px;
@@ -12,18 +24,6 @@
     gap: 8px;
     overflow-y: auto;
     position: relative;
-
-    ::-webkit-scrollbar {
-      width: 8px;
-    }
-
-    ::-webkit-scrollbar-track-piece {
-      background-color: $color-blue-400;
-    }
-    ::-webkit-scrollbar-thumb {
-      background-color: $color-green-100;
-      border-radius: 999px;
-    }
   }
 
   &__bottom {
