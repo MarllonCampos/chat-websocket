@@ -14,13 +14,13 @@ export enum MessageType {
 }
 const MessagePool: React.FC<MessagePoolProps> = ({ message, time, name, type, ...props }) => {
   return (
-    <div {...props}>
+    <>
       {type === MessageType.message ? (
         <Message name={name} message={message} time={time} key={`${message}-${time.toString()}`} />
       ) : (
         <UserConnectedChip author={name} />
       )}
-    </div>
+    </>
   );
 };
 
