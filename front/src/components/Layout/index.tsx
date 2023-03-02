@@ -46,9 +46,7 @@ const Layout = () => {
     });
 
     return () => {
-      socketState.off("connect");
       socketState.off("disconnect");
-      socketState.off("pong");
       socketState.disconnect();
     };
   }, []);
@@ -70,8 +68,6 @@ const Layout = () => {
     if (layoutChat.current) {
       console.log(layoutChat.current.scrollHeight);
       layoutChat.current?.scrollTo(0, layoutChat.current.scrollHeight);
-    } else {
-      console.log("Not Scrolled");
     }
   }, [messages]);
 
