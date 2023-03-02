@@ -1,37 +1,37 @@
 .layout {
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  background-color: $color-blue-400;
+  display: grid;
+  grid-template-rows: 1fr 48px;
 
   &__chat {
-    height: 100%;
-    background-size: 100%;
     max-height: calc(100vh - 48px);
     padding-bottom: 24px;
     display: flex;
     flex-direction: column;
+
     gap: 8px;
-    flex: 1;
-    overflow-y: scroll;
+    overflow-y: auto;
     position: relative;
-  }
-  &::before {
-    content: "";
-    background: rgba(0, 0, 0, 0.76) url("../../images/LayoutBackground.svg") no-repeat;
-    background-size: cover;
-    position: absolute;
-    top: 0px;
-    right: 0px;
-    bottom: 48px;
-    left: 0px;
-    opacity: 0.75;
+
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track-piece {
+      background-color: $color-blue-400;
+    }
+    ::-webkit-scrollbar-thumb {
+      background-color: $color-green-100;
+      border-radius: 999px;
+    }
   }
 
   &__bottom {
     width: 100%;
     padding: 10px;
     border-top: 3px solid $color-blue-300;
+    background-color: $color-blue-400;
+
     &-form {
       width: 100%;
       display: flex;
